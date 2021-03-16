@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "530245203403",
+    "project_id": "studyfirebase-bcf19",
+    "storage_bucket": "studyfirebase-bcf19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530245203403:android:b1599989c81c332542f24e",
+        "android_client_info": {
+          "package_name": "com.example.study"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530245203403-jbtn2db0cgrac0nmq7e2m5d4h1aogi1p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKnDER1NSAe-NY-icaehZw9IfNEGmvxwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530245203403-jbtn2db0cgrac0nmq7e2m5d4h1aogi1p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
