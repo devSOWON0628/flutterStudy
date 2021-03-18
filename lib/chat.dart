@@ -1,4 +1,12 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
+import 'chatData.dart';
+
+final fb = FirebaseDatabase.instance;
+final myController = TextEditingController();
+String name = 'Me';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({Key key, this.title}) : super(key: key);
@@ -10,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
   final _textController = TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  final FocusNode _focusNode = FocusNode();
   Widget _buildTextComposer() {
     return  Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -17,17 +26,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
         children: [
           Flexible(
             child:  TextField(
-              controller: _textController,
-              onSubmitted: _handleSubmitted,
-              decoration:  InputDecoration.collapsed(
-                  hintText: 'Send a message')
+                controller: myController,
+                onSubmitted: _handleSubmitted,
+                decoration: InputDecoration.collapsed(hintText: 'Send a message'),
+                focusNode: _focusNode,
             ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 4.0),
             child: IconButton(
                 icon: const Icon(Icons.send,color: Colors.blue,),
-                onPressed: () => _handleSubmitted(_textController.text)),
+                onPressed: () {
+                  _handleSubmitted(myController.text);
+                }),
           ),
         ],
       ),
@@ -35,10 +46,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
   }
 
   void _handleSubmitted(String Text) {
+    final ref = fb.reference();
+    var uuid = new Uuid();
+    final currentDateTime = DateTime.now();
     if(Text.isEmpty){
       return ;
     }
-    _textController.clear();
+    myController.clear();
+    ref.child(uuid.v1()).set({
+      'name': name,
+      'message': Text,
+      'time' : currentDateTime.toString()
+    });
     ChatMessage message = new ChatMessage(
         text: Text,
         animationController: new AnimationController(
@@ -46,15 +65,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
           vsync: this,
         )
     );
+
     setState(() {
       _messages.insert(0, message);
     });
+    _focusNode.requestFocus();
     message.animationController.forward();
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(title: Text('FriendlyChat', style: TextStyle(color: Colors.white),), backgroundColor: Colors.blue,),
+        appBar: AppBar(title: Text('자신에게 보내기', style: TextStyle(color: Colors.white),), backgroundColor: Colors.blue,),
         body: new Column(
             children: <Widget>[
               new Flexible(
@@ -77,7 +99,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
     );
   }
 }
-const String _name = 'sowon';
 class ChatMessage extends StatelessWidget {
   ChatMessage({this.text, this.animationController});
   final String text;
@@ -91,18 +112,22 @@ class ChatMessage extends StatelessWidget {
             children: <Widget>[
               new Container(
                 margin: const EdgeInsets.only(right: 16.0),
-                child: new CircleAvatar(child: new Text(_name[0])),
+                child: new CircleAvatar(child: new Text(name)),
               ),
-              new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Text(_name, style: Theme.of(context).textTheme.subhead),
-                    new Container(
-                      margin: const EdgeInsets.only(top: 5.0),
-                      child: new Text(text),
-                    )
-                  ]
-              )
+              new Container(
+                child: Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(name, style: Theme.of(context).textTheme.subhead),
+                      new Container(
+                        margin: const EdgeInsets.only(top: 5.0),
+                        child: new Text(text),
+                      )
+                    ],
+                  ),
+              ), // crossAxisAlignment: CrossAxisAlignment.start
+              ),
             ]
         )
     );
