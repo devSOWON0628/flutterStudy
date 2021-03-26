@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:study/register.dart';
 
 import 'chat.dart';
 import 'data.dart';
 import 'drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+FirebaseAuth auth = FirebaseAuth.instance;
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, this.age}) : super(key: key);
@@ -11,9 +14,11 @@ class MyHomePage extends StatefulWidget {
   final String age;
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   Widget _getFAB() {
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
@@ -37,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.black,
                 fontSize: 16.0),
             labelBackgroundColor: Colors.amber),
-        // FAB 2
+
         SpeedDialChild(
             child: Icon(Icons.assignment_outlined),
             onTap: () {
@@ -56,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +78,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(context,
                   MaterialPageRoute<void>(builder: (BuildContext context){
                     return MyApp2();
+                  }),
+                );
+              },
+              iconSize: 50,
+            ),
+            IconButton(
+              icon: Icon(Icons.ac_unit_outlined),
+              onPressed: (){
+                Navigator.push(context,
+                  MaterialPageRoute<void>(builder: (BuildContext context){
+                    return RegisterEmailSection();
                   }),
                 );
               },
