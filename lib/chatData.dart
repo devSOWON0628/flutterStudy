@@ -1,8 +1,4 @@
 import 'dart:core';
-import 'dart:core';
-
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 class ChatData implements Comparable<ChatData> {
   String userName;
   String message;
@@ -33,5 +29,12 @@ class ChatData implements Comparable<ChatData> {
     return 0;
     throw UnimplementedError();
   }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'name': this.userName,
+        'message': this.message,
+        'time': this.time
+      };
 
 }

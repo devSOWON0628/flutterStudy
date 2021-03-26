@@ -26,10 +26,10 @@ class Album {
 
 Future<List<Album>> fetchAlbum() async {
   final response = await http.get('https://jsonplaceholder.typicode.com/photos');
-  var res_set = jsonDecode(response.body);
+  var resSet = jsonDecode(response.body);
   List<Album> result = List();
-  for(var i = 0 ; i<res_set.length ; i++){
-    result.add(Album.fromJson(res_set[i]));
+  for(var i = 0 ; i<resSet.length ; i++){
+    result.add(Album.fromJson(resSet[i]));
   }
   if (response.statusCode == 200) {
      return result;
@@ -54,12 +54,7 @@ class _MyAppState extends State<MyApp2> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DATA',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('DATA'),
         ),
@@ -75,15 +70,11 @@ class _MyAppState extends State<MyApp2> {
                     itemCount: result.length,
                     itemBuilder: (context, index) {
                       return Card(
-                       // elevation: 2,
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
-                            // Padding(
-                            //   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            // ),
                             Expanded(
-                              child: Image.network(result[index].thumbnailUrl,width: 200, fit:BoxFit.fill,),
+                              child: Image.network(result[index].thumbnailUrl, fit:BoxFit.fill,),
                             ),
                             Expanded(
                               child: ListTile(
@@ -91,6 +82,7 @@ class _MyAppState extends State<MyApp2> {
                                 subtitle: Text(result[index].title, style: TextStyle(fontSize: 15),),
                               ),
                             ),
+
                           ],
                         ),
                       );
@@ -104,12 +96,10 @@ class _MyAppState extends State<MyApp2> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              // By default, show a loading spinner.
               return CircularProgressIndicator();
             },
           ),
         ),
-      ),
-    );
+      );
   }
 }

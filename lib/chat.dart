@@ -68,10 +68,26 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
     message.animationController.forward();
   }
 
+  void _handleSubmitted(String Text) {
+    var uuid = new Uuid();
+    final DateTime currentDateTime = DateTime.now();
+    if(Text.isEmpty){
+      return ;
+    }
+    myController.clear();
+    ref.child(uuid.v4()).set({
+      'name': myName,
+      'message': Text,
+      'time' : currentDateTime.toString()
+    });
+    setMessage(Text, myName);
+    _focusNode.requestFocus();
+  }
+
   Widget _buildTextComposer() {
     return  Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),
-      child:  Row(
+      child: Row(
         children: [
           Flexible(
             child: TextField(
@@ -92,22 +108,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
         ],
       ),
     );
-  }
-
-  void _handleSubmitted(String Text) {
-    var uuid = new Uuid();
-    final String currentDateTime = DateTime.now().toString();
-    if(Text.isEmpty){
-      return ;
-    }
-    myController.clear();
-    ref.child(uuid.v4()).set({
-      'name': myName,
-      'message': Text,
-      'time' : currentDateTime.toString()
-    });
-    setMessage(Text, myName);
-    _focusNode.requestFocus();
   }
 
   @override
@@ -142,6 +142,7 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final String name;
   final AnimationController animationController;
+
   Widget myTextAlign(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -155,6 +156,7 @@ class ChatMessage extends StatelessWidget {
       ],
     );
   }
+
   Widget otherTextAlign(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,12 +170,14 @@ class ChatMessage extends StatelessWidget {
       ],
     );
   }
+
   Widget circle(String text){
     return  Container(
         margin: const EdgeInsets.only(right: 16.0),
         child: new CircleAvatar(child:new Text(text))
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return new Container(
